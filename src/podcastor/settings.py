@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     # 3th party apps
     'rest_framework.authtoken',
     # Podcastor apps
+    'app.core',
     'app.account',
     'app.podcast',
     'app.api'
@@ -119,5 +120,21 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100,
-    'PAGE_QUERY_PARAM': 'collection'
+    'PAGE_QUERY_PARAM': 'collection',
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
+
+# Celery (Background task runner) confs
+
+from datetime import timedelta
+from kombu import Exchange, Queue
+
+CELERY_TIMEZONE = 'UTC'
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']
+
+CELERY_DEFAULT_QUEUE = 'podcastor'
+CELERY_QUEUES = (
+    Queue('podcastor', Exchange('podcastor'), routing_key='podcastor'),
+)

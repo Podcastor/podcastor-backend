@@ -15,4 +15,4 @@ class EpisodeFilter(django_filters.FilterSet):
     class Meta:
         model = Episode
         fields = ['title', 'description', 'slug', 'pub_date', 'podcast__title',
-                  'podcast__slug']
+                  'podcast__slug', 'podcast__id']

@@ -30,8 +30,7 @@ class PodcastViewSet(viewsets.ModelViewSet):
     @list_route(methods=['get'])
     def search(self, request):
         qs = Podcast.objects.filter(
-            Q(title__icontains=request.query_params.get('title') or '') |
-            Q(link__icontains=request.query_params.get('link') or ''))
+                link__icontains=request.query_params.get('link'))
 
         if qs:
             page = self.paginate_queryset(qs)

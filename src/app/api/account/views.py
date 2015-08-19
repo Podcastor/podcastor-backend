@@ -17,7 +17,7 @@ from app.api.account.serializers import AccountSerializer
 class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = AccountSerializer
-    permission_classes = (AllowAny, )
+    permission_classes = [AllowAny]
     error = {
         'error': 'email or password incorrect.'
     }

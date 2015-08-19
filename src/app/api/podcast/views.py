@@ -8,7 +8,6 @@ from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
-from rest_framework.permissions import IsAuthenticated
 
 from app.podcast import filters
 from app.podcast.models import Podcast, Episode
@@ -19,7 +18,6 @@ class EpisodeViewSet(mixins.ListModelMixin,
                      mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
 
-    permissions_class = [IsAuthenticated]
     serializer_class = EpisodeSerializer
     queryset = Episode.objects.all()
     filter_class = filters.EpisodeFilter
@@ -27,7 +25,6 @@ class EpisodeViewSet(mixins.ListModelMixin,
 
 class PodcastViewSet(viewsets.ModelViewSet):
     queryset = Podcast.objects.all()
-    permissions_class = [IsAuthenticated]
     serializer_class = PodcastSerializer
 
     @list_route(methods=['get'])

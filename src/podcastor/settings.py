@@ -40,7 +40,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # 3th party apps
     'rest_framework.authtoken',
+    'corsheaders',
     # Podcastor apps
+    'app.core',
     'app.account',
     'app.podcast',
     'app.api'
@@ -48,6 +50,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -77,6 +80,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'podcastor.wsgi.application'
 
+# Cors
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -119,5 +125,22 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100,
-    'PAGE_QUERY_PARAM': 'collection'
+    'PAGE_QUERY_PARAM': 'collection',
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',)
 }
+
+# Celery (Background task runner) confs
+
+from datetime import timedelta
+from kombu import Exchange, Queue
+
+CELERY_TIMEZONE = 'UTC'
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']
+
+CELERY_DEFAULT_QUEUE = 'podcastor'
+CELERY_QUEUES = (
+    Queue('podcastor', Exchange('podcastor'), routing_key='podcastor'),
+)

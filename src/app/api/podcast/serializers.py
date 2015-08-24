@@ -21,3 +21,12 @@ class PodcastSerializer(serializers.ModelSerializer):
             validated_data['slug'] = slug
 
             return super(PodcastSerializer, self).create(validated_data)
+
+
+class EpisodeSerializer(serializers.ModelSerializer):
+    podcast = PodcastSerializer()
+
+    class Meta:
+        model = Episode
+        fields = ['id', 'podcast', 'title', 'description', 'slug',
+                  'audio_link', 'link', 'image', 'pub_date']

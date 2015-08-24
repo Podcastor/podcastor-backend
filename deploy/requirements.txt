@@ -3,3 +3,7 @@ psycopg2
 djangorestframework
 requests
 xmltodict
+celery[redis]
+python-dateutil
+django-filter
+django-cors-headers

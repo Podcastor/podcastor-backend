@@ -26,26 +26,18 @@ class EpisodeViewSet(mixins.ListModelMixin,
 class PodcastViewSet(viewsets.ModelViewSet):
     queryset = Podcast.objects.all()
     serializer_class = PodcastSerializer
+    filter_class = filters.PodcastFilter
 
-    @list_route(methods=['get'])
-    def search(self, request):
-        qs = Podcast.objects.filter(
-                link__icontains=request.query_params.get('link'))
-
-        if qs:
-            page = self.paginate_queryset(qs)
-            serializer = self.serializer_class(page, many=True)
-
-            return self.get_paginated_response(serializer.data)
-
-        data = Podcast.get_data_from_feed(request.query_params.get('link'))
+    @list_route(methods=['post'])
+    def create_from_feed(self, request):
+        data = Podcast.get_data_from_feed(request.data.get('link'))
 
         if data:
             serializer = self.serializer_class(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return super(PodcastViewSet, self).search(request)
 
         return Response({'detail': 'Feed URL is invalid or non exists.'},
-                        status=HTTP_400_BAD_REQUEST)
+                        status=status.HTTP_400_BAD_REQUEST)

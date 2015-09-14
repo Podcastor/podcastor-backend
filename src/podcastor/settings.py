@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     # 3th party apps
     'rest_framework.authtoken',
     'corsheaders',
+    'django_extensions',
     # Podcastor apps
     'app.core',
     'app.account',

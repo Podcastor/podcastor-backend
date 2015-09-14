@@ -15,10 +15,15 @@ class Podcast(models.Model):
     link = models.URLField(max_length=120)
     slug = models.SlugField(max_length=120)
     image = models.URLField(null=True, blank=True)
+    language = models.CharField(max_length=20, null=True, blank=True)
+    site_url = models.URLField(null=True, blank=True)
 
     @classmethod
     def get_data_from_feed(self, feed_url):
-        response = requests.get(feed_url)
+        try:
+            response = requests.get(feed_url)
+        except Exception:
+            return None
 
         if response.status_code == 200:
             data = xmltodict.parse(response.content)['rss']['channel']
@@ -27,7 +32,9 @@ class Podcast(models.Model):
                 'title': data['title'],
                 'description': data['description'],
                 'link': feed_url,
-                'image': data['image']['url']
+                'image': data['image']['url'],
+                'language': data.get('language'),
+                'site_url': data.get('link')
             }
 
     def get_feed_data(self):

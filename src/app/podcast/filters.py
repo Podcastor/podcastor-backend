@@ -16,3 +16,13 @@ class EpisodeFilter(django_filters.FilterSet):
         model = Episode
         fields = ['title', 'description', 'slug', 'pub_date', 'podcast__title',
                   'podcast__slug', 'podcast__id']
+
+
+class PodcastFilter(django_filters.FilterSet):
+    title = django_filters.CharFilter(lookup_type='icontains')
+    link = django_filters.CharFilter(lookup_type='icontains')
+    description = django_filters.CharFilter(lookup_type='icontains')
+
+    class Meta:
+        model = Podcast
+        fields = ['title', 'link', 'description']

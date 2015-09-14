@@ -9,7 +9,16 @@ from app.podcast.models import Podcast, Episode
 class PodcastSerializer(serializers.ModelSerializer):
     class Meta:
         model = Podcast
-        fields = ['id', 'slug', 'title', 'description', 'link', 'image']
+        fields = [
+            'id',
+            'slug',
+            'title',
+            'description',
+            'link',
+            'image',
+            'site_url',
+            'language'
+        ]
         read_only_fields = ('id', 'slug')
 
     def create(self, validated_data):
@@ -18,8 +27,6 @@ class PodcastSerializer(serializers.ModelSerializer):
         try:
             return Podcast.objects.get(slug=slug)
         except Podcast.DoesNotExist:
-            validated_data['slug'] = slug
-
             return super(PodcastSerializer, self).create(validated_data)
 
 

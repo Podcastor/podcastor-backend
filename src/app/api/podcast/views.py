@@ -37,7 +37,7 @@ class PodcastViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
-            return super(PodcastViewSet, self).search(request)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response({'detail': 'Feed URL is invalid or non exists.'},
                         status=status.HTTP_400_BAD_REQUEST)

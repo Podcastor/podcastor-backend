@@ -20,6 +20,8 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
+    bookmarked_podcasts = models.ManyToManyField('podcast.Podcast')
+    bookmarked_episodes = models.ManyToManyField('podcast.Episode')
 
     objects = UserManager()
 
